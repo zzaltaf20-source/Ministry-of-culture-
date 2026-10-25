@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="en" class="intro-lock">
+<!--
+  ============================================================
+  MINISTRY OF CULTURE · GOVERNMENT OF INDIA
+  Independent, unofficial cinematic redesign concept (portfolio).
+  NOT affiliated with or endorsed by the Government of India.
+  Single file · HTML5 + CSS3 + vanilla JS + three.js (CDN, optional).
+  Imagery: openly-licensed public/press sources, hard-coded.
+  Leadership portraits: public press photographs, as displayed
+  on culture.gov.in (names/titles are public information).
+  ============================================================
+-->
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ministry of Culture — Government of India · Concept Redesign</title>
+<meta name="description" content="An independent, unofficial cinematic redesign concept of the Ministry of Culture website, created for a developer portfolio. Not affiliated with or endorsed by the Government of India.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23521721'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23C9A24B' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Public+Sans:wght@400;500;600;700&family=Tiro+Devanagari+Hindi:ital@0;1&display=swap" rel="stylesheet">
+<style>
+/* ========== 1 · TOKENS ========== */
+:root{
+  --ivory:#F7F1E4; --ivory-2:#EFE6D2; --paper:#FCF9F0;
+  --maroon:#6B1F2A; --maroon-deep:#521721; --maroon-soft:rgba(107,31,42,.09);
+  --gold:#B98A2E; --gold-2:#C9A24B; --gold-soft:rgba(185,138,46,.14);
+  --saffron:#D07A2A; --charcoal:#2A2320; --ink:#3A2E26;
+  --muted:rgba(58,46,38,.7); --faint:rgba(58,46,38,.45);
+  --line:rgba(58,46,38,.15); --line-soft:rgba(58,46,38,.09);
+  --shadow-sm:0 1px 2px rgba(42,35,32,.05),0 8px 22px -10px rgba(42,35,32,.18);
+  --shadow-md:0 2px 4px rgba(42,35,32,.06),0 22px 50px -18px rgba(42,35,32,.32);
+  --serif:"Cormorant Garamond",Georgia,serif;
+  --sans:"Public Sans",system-ui,sans-serif;
+  --hindi:"Tiro Devanagari Hindi",serif;
+  --ease:cubic-bezier(.22,.68,.24,1); --r:12px;
+  --noticeH:38px;
+}
+/* ========== 2 · BASE ========== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+html{scroll-padding-top:calc(96px + var(--noticeH))}
+html.intro-lock body{overflow:hidden}
+body{font-family:var(--sans);color:var(--ink);background:var(--ivory);line-height:1.65;font-size:16px;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+::selection{background:var(--maroon);color:var(--ivory)}
+:focus-visible{outline:2px solid var(--maroon);outline-offset:3px;border-radius:4px}
+.wrap{width:min(1180px,92%);margin-inline:auto}
+section{position:relative}
+h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.08;letter-spacing:.002em}
+.skip-link{position:fixed;top:-60px;left:16px;z-index:400;background:var(--maroon-deep);color:var(--ivory);padding:10px 18px;border-radius:8px;font-weight:600;transition:top .25s}
+.skip-link:focus{top:calc(var(--noticeH) + 10px)}
+body::after{content:"";position:fixed;inset:0;z-index:120;pointer-events:none;opacity:.06;
+  background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="240" height="240" filter="url(%23n)" opacity="0.6"/></svg>')}
+/* notice bar */
+#noticeBar{position:fixed;top:0;left:0;right:0;z-index:260;background:var(--maroon-deep);color:rgba(247,241,228,.92);font-size:12px;line-height:1.5;padding:7px 16px;display:flex;align-items:center;justify-content:center;gap:9px;text-align:center;border-bottom:1px solid rgba(201,162,75,.35)}
+#noticeBar .ic{flex:none;width:16px;height:16px;border-radius:50%;border:1.4px solid var(--gold-2);color:var(--gold-2);display:grid;place-items:center;font-size:10px;font-weight:700;font-style:normal}
+#noticeBar b{color:var(--gold-2)}
+#noticeBar a{color:var(--gold-2);text-decoration:underline;text-underline-offset:3px;font-weight:600}
+/* ========== 3 · UTILITIES ========== */
+.js .rv{opacity:0;transform:translateY(26px);transition:opacity .85s var(--ease),transform .85s var(--ease);transition-delay:var(--d,0s)}
+.js .rv.in{opacity:1;transform:none}
+.lm{display:block;overflow:hidden}
+.js .lm>span{display:block;transform:translateY(112%);transition:transform .95s var(--ease);transition-delay:var(--d,0s)}
+.js .lm.in>span{transform:none}
+.kicker{display:flex;align-items:center;gap:12px;font-size:11px;font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--faint)}
+.kicker::before{content:"";width:26px;height:1px;background:var(--gold)}
+.kicker .hi{font-family:var(--hindi);font-size:15px;letter-spacing:0;text-transform:none;color:var(--maroon)}
+.kicker.on-dark{color:rgba(247,241,228,.55)}
+.kicker.on-dark .hi{color:var(--gold-2)}
+.btn{display:inline-flex;align-items:center;gap:12px;padding:14px 26px;border-radius:999px;font-weight:600;font-size:15px;transition:transform .3s var(--ease),background .3s,color .3s,border-color .3s;white-space:nowrap}
+.btn .arr{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.16);font-size:12px;transition:transform .3s var(--ease)}
+.btn:hover .arr{transform:translateX(4px)}
+.btn-solid{background:var(--maroon-deep);color:var(--ivory)}
+.btn-solid:hover{background:var(--gold);color:var(--maroon-deep);transform:translateY(-2px)}
+.btn-ghost{border:1px solid var(--line);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--maroon);background:var(--paper);transform:translateY(-2px)}
+.btn-light{border:1px solid rgba(247,241,228,.35);color:var(--ivory)}
+.btn-light:hover{background:rgba(247,241,228,.1);transform:translateY(-2px)}
+.chip{display:inline-block;padding:3px 11px;border-radius:999px;font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.chip-gold{background:var(--gold-soft);color:#8a651c}
+.chip-maroon{background:var(--maroon-soft);color:var(--maroon)}
+.chip-dark{background:rgba(42,35,32,.08);color:var(--charcoal)}
+.note-tag{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);border:1px dashed var(--line);border-radius:999px;padding:4px 12px;display:inline-block}
+.sect{padding:104px 0}
+.sect-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:48px;flex-wrap:wrap}
+.sect-head h2{font-size:clamp(2rem,4vw,3.2rem);max-width:20ch;margin-top:16px}
+.sect-head h2 em{font-style:italic;color:var(--maroon)}
+/* ========== 4 · HEADER ========== */
+#progress{position:fixed;top:var(--noticeH);left:0;right:0;height:2px;z-index:210;transform-origin:0 50%;transform:scaleX(0);background:linear-gradient(90deg,var(--gold),var(--maroon))}
+header.site{position:fixed;top:var(--noticeH);left:0;right:0;z-index:200;transition:background .4s,box-shadow .4s,border-color .4s;border-bottom:1px solid transparent}
+header.site.scrolled{background:rgba(252,249,240,.94);backdrop-filter:saturate(1.2) blur(10px);border-color:var(--line-soft);box-shadow:0 6px 24px -18px rgba(42,35,32,.4)}
+.nav-in{display:flex;align-items:center;gap:26px;padding:12px 0}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.emb-slot{position:relative;width:44px;height:52px;flex:none}
+.emb-slot .emb-fb{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--hindi);font-size:15px;color:var(--maroon);border:1px dashed var(--line);border-radius:8px;background:var(--paper)}
+.emb-slot img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;opacity:0;transition:opacity .6s}
+.emb-slot img.on{opacity:1}
+.brand-gov{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.brand-min{font-family:var(--serif);font-size:21px;font-weight:700;color:var(--maroon-deep);line-height:1.1}
+.brand-hi{font-family:var(--hindi);font-size:13px;color:var(--muted)}
+nav.main-menu{margin-left:auto}
+nav.main-menu ul{display:flex;gap:2px;list-style:none;align-items:center}
+nav.main-menu a{display:block;padding:9px 12px;font-size:13.5px;font-weight:600;color:var(--muted);border-radius:8px;position:relative;transition:color .25s}
+nav.main-menu a::after{content:"";position:absolute;left:12px;right:12px;bottom:5px;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+nav.main-menu a:hover,nav.main-menu a[aria-current="true"]{color:var(--maroon-deep)}
+nav.main-menu a:hover::after,nav.main-menu a[aria-current="true"]::after{transform:scaleX(1)}
+.nav-cta{margin-left:6px;padding:10px 20px !important;background:var(--maroon-deep);color:var(--ivory) !important;border-radius:999px}
+.nav-cta:hover{background:var(--gold);color:var(--maroon-deep) !important}
+.nav-cta::after{display:none}
+#menuBtn{display:none;width:44px;height:44px;margin-left:auto;border-radius:10px;border:1px solid var(--line);position:relative}
+#menuBtn span{position:absolute;left:12px;right:12px;height:2px;background:var(--maroon-deep);transition:.3s var(--ease)}
+#menuBtn span:nth-child(1){top:16px}#menuBtn span:nth-child(2){top:21px}#menuBtn span:nth-child(3){top:26px}
+header.open #menuBtn span:nth-child(1){top:21px;transform:rotate(45deg)}
+header.open #menuBtn span:nth-child(2){opacity:0}
+header.open #menuBtn span:nth-child(3){top:21px;transform:rotate(-45deg)}
+/* ========== 5 · INTRO ========== */
+#intro{position:fixed;inset:0;z-index:500;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;background:radial-gradient(120% 90% at 50% 10%,#FEFBF3 0%,var(--ivory) 55%,#EDE2C8 100%);transition:opacity .8s var(--ease)}
+#intro.leaving{opacity:0;pointer-events:none}
+#introCanvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;opacity:.9;
+  -webkit-mask-image:radial-gradient(70% 60% at 50% 46%,#000 30%,transparent 100%);mask-image:radial-gradient(70% 60% at 50% 46%,#000 30%,transparent 100%)}
+.intro-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(42% 34% at 50% 42%,rgba(201,162,75,.2),transparent 70%)}
+.intro-float .fl{position:absolute;left:var(--x);top:var(--y);transform:scale(var(--s,1));color:var(--maroon);opacity:0;font-family:var(--serif);font-style:italic;user-select:none;pointer-events:none;filter:blur(var(--bl,0));will-change:transform}
+.intro-float .fl svg{width:calc(36px * var(--fs,1));height:auto;display:block}
+.intro-float .fl .ch{font-size:calc(24px * var(--fs,1))}
+.intro.run .intro-float .fl{animation:bob var(--dur,8s) ease-in-out var(--del,0s) infinite alternate,flin 1.4s var(--del,0s) both}
+@keyframes bob{from{transform:scale(var(--s,1)) translateY(0) rotate(var(--r0,0deg))}to{transform:scale(var(--s,1)) translateY(-16px) rotate(var(--r1,5deg))}}
+@keyframes flin{from{opacity:0}to{opacity:var(--o,.45)}}
+#intro.leaving .intro-float .fl{animation:none;opacity:0;transition:opacity .6s,transform .8s var(--ease);transform:scale(var(--s,1)) translateY(-60px)}
+.intro-stack{position:relative;display:flex;flex-direction:column;align-items:center;padding:0 20px;max-width:760px}
+.emblem-wrap{position:relative;width:clamp(140px,21vmin,196px)}
+.emblem-wrap::after{content:"";position:absolute;inset:-12% -40%;pointer-events:none;background:linear-gradient(100deg,transparent 42%,rgba(255,240,200,.95) 50%,transparent 58%);transform:translateX(-130%) skewX(-8deg)}
+.intro.run .emblem-wrap::after{animation:sweep 1.3s 1.5s var(--ease) forwards}
+@keyframes sweep{to{transform:translateX(130%) skewX(-8deg)}}
+.emblem-img{width:100%;height:auto;opacity:0;transform:scale(.94);filter:drop-shadow(0 16px 28px rgba(82,23,33,.28))}
+.intro.run .emblem-img{animation:emblemIn 1.6s .2s var(--ease) forwards}
+@keyframes emblemIn{to{opacity:1;transform:none}}
+.emb-fallback{display:none;border:1px dashed var(--line);border-radius:12px;background:var(--paper);padding:26px 20px;font-family:var(--hindi);color:var(--maroon);font-size:17px;line-height:1.7}
+.emblem-wrap.no-emb .emb-fallback{display:block}
+.emblem-wrap.no-emb .emblem-img{display:none}
+.emblem-cap{margin-top:12px;font-family:var(--hindi);font-size:15px;color:var(--maroon);opacity:0}
+.intro.run .emblem-cap{animation:part .9s 1.7s both}
+@keyframes part{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.intro-title{margin-top:24px;font-family:var(--serif);font-size:clamp(24px,4.6vw,44px);letter-spacing:.18em;font-weight:600;color:var(--maroon-deep)}
+.intro-gov{margin-top:12px;font-size:12px;font-weight:700;letter-spacing:.5em;text-transform:uppercase;color:var(--muted);opacity:0}
+.intro.run .intro-gov{animation:govIn 1.1s 2.35s var(--ease) forwards}
+@keyframes govIn{from{opacity:0;letter-spacing:.7em}to{opacity:1;letter-spacing:.34em}}
+.intro-rule{width:0;height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin-top:18px}
+.intro.run .intro-rule{animation:ruleGrow 1s 2.7s var(--ease) forwards}
+@keyframes ruleGrow{to{width:min(320px,60vw)}}
+.intro-cta{margin-top:26px;opacity:0;visibility:hidden}
+.intro.run .intro-cta{animation:part .9s 3s both;visibility:visible}
+.intro-note{margin-top:18px;font-size:11px;color:var(--faint);opacity:0}
+.intro.run .intro-note{animation:part 1s 3.3s both}
+#skipBtn{position:absolute;top:calc(var(--noticeH) + 16px);right:22px;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding:9px 16px;border:1px solid var(--line);border-radius:999px;transition:.3s;background:rgba(252,249,240,.7)}
+#skipBtn:hover{color:var(--maroon-deep);border-color:var(--maroon);background:var(--paper)}
+/* ========== 6 · HERO ========== */
+.hero{padding:calc(150px + var(--noticeH)) 0 74px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero-word{position:absolute;top:calc(90px + var(--noticeH));left:-1%;font-family:var(--hindi);font-size:clamp(120px,17vw,230px);color:var(--maroon);opacity:.05;line-height:1;pointer-events:none;user-select:none;z-index:0}
+.hero-copy{position:relative;z-index:2}
+.hero h1{font-size:clamp(2.6rem,5.8vw,4.6rem);margin:22px 0 24px}
+.hero h1 em{font-style:italic;color:var(--maroon)}
+.hero-lead{max-width:52ch;color:var(--muted);font-size:17px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px}
+.hero-facts{display:flex;margin-top:44px;border-top:1px solid var(--line);flex-wrap:wrap}
+.hero-facts div{padding:18px 26px 0 0;margin-right:26px;border-right:1px solid var(--line-soft)}
+.hero-facts div:last-of-type{border:0;margin:0}
+.hero-facts b{font-family:var(--serif);font-size:32px;font-weight:600;color:var(--maroon-deep);display:block;line-height:1}
+.hero-facts span{font-size:11.5px;color:var(--faint);letter-spacing:.06em;text-transform:uppercase}
+.hero-facts .lbl{margin-top:14px}
+.hero-media{position:relative;height:600px;z-index:1}
+.hm{position:absolute;border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-md);border:5px solid var(--paper)}
+.hm img{width:100%;height:100%;object-fit:cover}
+.hm-1{right:0;top:0;width:62%;aspect-ratio:3/4}
+.hm-2{left:0;bottom:4%;width:46%;aspect-ratio:4/3;z-index:2}
+.hm-3{left:8%;top:-3%;width:34%;aspect-ratio:1;z-index:1;transform:rotate(-2deg)}
+@media (prefers-reduced-motion:no-preference){.hm img{animation:kenburns 18s ease-in-out infinite alternate}.hm-2 img{animation-delay:-9s}}
+@keyframes kenburns{from{transform:scale(1)}to{transform:scale(1.09) translate(-1.5%,1.5%)}}
+.hm-motif{position:absolute;right:-4%;bottom:-8%;width:200px;height:200px;color:var(--maroon);opacity:.12;z-index:0}
+.hm-motif svg{width:100%;height:100%}
+@media (prefers-reduced-motion:no-preference){.hm-motif{animation:spin 100s linear infinite}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hm-note{position:absolute;right:4%;bottom:16%;z-index:3;width:212px;background:var(--paper);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow-md);padding:13px 15px;transform:rotate(2.5deg)}
+.hm-note b{font-size:12px;display:block;margin-bottom:4px;color:var(--maroon-deep);font-family:var(--serif);font-size:14px}
+.hm-note p{font-size:11px;color:var(--muted);line-height:1.5}
+.hm-note::before{content:"";position:absolute;top:-7px;left:50%;width:12px;height:12px;border-radius:50%;background:var(--gold);border:2px solid var(--paper)}
+/* ========== 7 · TICKER ========== */
+.ticker{border-block:1px solid var(--line);background:var(--paper);overflow:hidden;display:flex;align-items:stretch}
+.ticker-label{flex:none;display:flex;align-items:center;gap:8px;padding:12px 20px;background:var(--maroon-deep);color:var(--ivory);font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase}
+.ticker-label i{width:7px;height:7px;border-radius:50%;background:var(--gold-2);animation:pulse 2s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.ticker-view{overflow:hidden;flex:1;display:flex;align-items:center}
+.ticker-track{display:flex;width:max-content}
+@media (prefers-reduced-motion:no-preference){.ticker-track{animation:tick 48s linear infinite}.ticker-view:hover .ticker-track{animation-play-state:paused}}
+@keyframes tick{to{transform:translateX(-50%)}}
+.tick{display:inline-flex;align-items:center;gap:10px;padding:12px 34px;font-size:13.5px;color:var(--muted);white-space:nowrap}
+.tick::after{content:"✦";color:var(--gold);margin-left:34px;font-size:10px}
+.tick b{font-weight:700;color:var(--maroon);font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid rgba(107,31,42,.3);border-radius:999px;padding:2px 9px}
+/* ========== 8 · DISCOVER BENTO ========== */
+.disc-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+.disc{position:relative;grid-column:span 3;border-radius:var(--r);overflow:hidden;min-height:250px;display:flex;align-items:flex-end;border:1px solid var(--line);background:var(--charcoal);transition:transform .4s var(--ease),box-shadow .4s var(--ease)}
+.disc.wide{grid-column:span 6;min-height:300px}
+.disc img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform 1.5s var(--ease),filter .6s;filter:saturate(.92)}
+.disc:hover img{transform:scale(1.07);filter:saturate(1.05)}
+.disc::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 35%,rgba(30,16,14,.82))}
+.disc-body{position:relative;z-index:2;padding:20px;color:var(--ivory);width:100%}
+.disc-body .hi{font-family:var(--hindi);font-size:13px;color:var(--gold-2)}
+.disc-body h3{font-size:1.35rem;color:#fff;margin:2px 0 4px}
+.disc-body p{font-size:12.5px;color:rgba(247,241,228,.75);max-height:0;overflow:hidden;opacity:0;transition:max-height .5s var(--ease),opacity .4s}
+.disc:hover .disc-body p,.disc:focus-visible .disc-body p{max-height:60px;opacity:1}
+.disc .go{position:absolute;top:14px;right:14px;z-index:2;width:34px;height:34px;border-radius:50%;background:rgba(252,249,240,.9);color:var(--maroon-deep);display:grid;place-items:center;font-size:13px;transition:.3s}
+.disc:hover .go{background:var(--gold);transform:rotate(45deg)}
+/* ========== 9 · GALLERY ========== */
+#heritage{background:var(--paper);border-block:1px solid var(--line)}
+.filters{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:34px}
+.filters button{padding:8px 18px;border-radius:999px;border:1px solid var(--line);font-size:12.5px;font-weight:600;color:var(--muted);transition:.3s}
+.filters button:hover{border-color:var(--maroon);color:var(--maroon)}
+.filters button[aria-pressed="true"]{background:var(--maroon-deep);border-color:var(--maroon-deep);color:var(--ivory)}
+.gal{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;grid-auto-rows:210px;grid-auto-flow:dense}
+.gal figure{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:var(--charcoal)}
+.gal figure.tall{grid-row:span 2}
+.gal figure.wide{grid-column:span 2}
+.gal img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.gal figure:hover img{transform:scale(1.06)}
+.gal figcaption{position:absolute;left:0;right:0;bottom:0;padding:12px 14px;color:#fff;font-size:12px;background:linear-gradient(transparent,rgba(30,16,14,.85));display:flex;justify-content:space-between;gap:8px;align-items:baseline}
+.gal figcaption b{font-family:var(--serif);font-size:15px;font-weight:600}
+.gal figcaption span{font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gold-2)}
+.gal figure.gone{display:none}
+.gal figure.pop{animation:pop .5s var(--ease)}
+@keyframes pop{from{opacity:0;transform:translateY(14px)}}
+/* ========== 10 · MUSEUMS RAIL ========== */
+#museums{background:var(--maroon-deep);color:var(--ivory);overflow:hidden}
+#museums::before{content:"";position:absolute;left:-140px;bottom:-160px;width:480px;height:480px;background:radial-gradient(circle,rgba(201,162,75,.16),transparent 65%);pointer-events:none}
+#museums h2{color:var(--ivory)}
+#museums .sect-head p{color:rgba(247,241,228,.62);max-width:44ch}
+.rail-ctl{display:flex;gap:10px}
+.rail-ctl button{width:46px;height:46px;border-radius:50%;border:1px solid rgba(247,241,228,.3);color:var(--ivory);font-size:17px;transition:.3s;display:grid;place-items:center}
+.rail-ctl button:hover{background:var(--gold);border-color:var(--gold);color:var(--maroon-deep)}
+.rail{display:flex;gap:20px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px 4px 24px;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 3%,#000 97%,transparent)}
+.rail::-webkit-scrollbar{display:none}
+.mus-card{flex:0 0 min(320px,80vw);scroll-snap-align:start;background:rgba(247,241,228,.05);border:1px solid rgba(247,241,228,.14);border-radius:var(--r);overflow:hidden;transition:transform .4s var(--ease),border-color .4s}
+.mus-card:hover{transform:translateY(-6px);border-color:rgba(201,162,75,.6)}
+.mus-img{aspect-ratio:4/3;overflow:hidden}
+.mus-img img{width:100%;height:100%;object-fit:cover;transition:transform 1.4s var(--ease)}
+.mus-card:hover .mus-img img{transform:scale(1.07)}
+.mus-body{padding:20px 20px 22px}
+.mus-body .chip{background:rgba(201,162,75,.18);color:var(--gold-2)}
+.mus-body h3{font-size:1.3rem;color:#fff;margin:10px 0 6px}
+.mus-body p{font-size:13px;color:rgba(247,241,228,.62)}
+.mus-body a{display:inline-flex;gap:8px;align-items:center;margin-top:14px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold-2)}
+.mus-body a i{font-style:normal;transition:transform .3s}
+.mus-body a:hover i{transform:translate(3px,-3px)}
+/* ========== 11 · STORIES STICKY ========== */
+#stories .wrap{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start}
+.stories-sticky{position:sticky;top:calc(110px + var(--noticeH))}
+.stories-sticky h2{font-size:clamp(2rem,3.8vw,3rem);margin:16px 0 18px}
+.stories-sticky p{color:var(--muted);max-width:40ch}
+.chapters{display:flex;flex-direction:column;gap:30px}
+.chapter{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;box-shadow:var(--shadow-sm)}
+.chapter figure{aspect-ratio:16/9;overflow:hidden}
+.chapter img{width:100%;height:100%;object-fit:cover;transition:transform 1.6s var(--ease)}
+.chapter:hover img{transform:scale(1.05)}
+.chapter-body{padding:26px 28px 28px}
+.chapter-body .no{font-family:var(--serif);font-style:italic;font-size:15px;color:var(--gold);letter-spacing:.2em}
+.chapter-body h3{font-size:1.7rem;color:var(--maroon-deep);margin:6px 0 8px}
+.chapter-body p{color:var(--muted);font-size:14.5px}
+/* ========== 12 · EVENTS ========== */
+#events{background:var(--ivory-2)}
+.ev-list{display:flex;flex-direction:column;gap:14px}
+.ev{display:grid;grid-template-columns:120px 1fr auto;gap:22px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px 24px;transition:transform .35s var(--ease),box-shadow .35s;position:relative;overflow:hidden}
+.ev::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--gold);transform:scaleY(0);transition:transform .35s var(--ease)}
+.ev:hover{transform:translateX(6px);box-shadow:var(--shadow-sm)}
+.ev:hover::before{transform:scaleY(1)}
+.ev-date{font-family:var(--serif);text-align:center;border-right:1px solid var(--line-soft);padding-right:18px}
+.ev-date b{display:block;font-size:30px;color:var(--maroon-deep);line-height:1}
+.ev-date span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+.ev h3{font-size:1.25rem;color:var(--maroon-deep)}
+.ev p{font-size:13px;color:var(--muted);margin-top:3px}
+.ev .chips{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap}
+.ev a.btn{padding:10px 18px;font-size:13px}
+/* ========== 13 · FESTIVALS ========== */
+.fest-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.fest{border:1px solid var(--line);border-radius:var(--r);background:var(--paper);padding:24px 20px;position:relative;overflow:hidden;transition:transform .35s var(--ease),box-shadow .35s,border-color .35s}
+.fest:hover{transform:translateY(-5px);box-shadow:var(--shadow-md);border-color:rgba(185,138,46,.5)}
+.fest .no{font-family:var(--serif);font-style:italic;font-size:44px;color:var(--gold);opacity:.35;line-height:1}
+.fest h3{font-size:1.2rem;color:var(--maroon-deep);margin:10px 0 2px}
+.fest .st{font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+.fest ul{list-style:none;margin-top:14px;display:flex;flex-direction:column;gap:7px}
+.fest li{font-size:13px;color:var(--muted);padding-left:16px;position:relative}
+.fest li::before{content:"";position:absolute;left:0;top:8px;width:7px;height:1px;background:var(--gold)}
+/* ========== 14 · ARTISTS ========== */
+#artists{background:var(--paper);border-block:1px solid var(--line)}
+.art-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.art{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--ivory);transition:transform .4s var(--ease),box-shadow .4s}
+.art:hover{transform:translateY(-6px);box-shadow:var(--shadow-md)}
+.art figure{aspect-ratio:4/4.6;overflow:hidden}
+.art img{width:100%;height:100%;object-fit:cover;filter:saturate(.94);transition:transform 1.4s var(--ease)}
+.art:hover img{transform:scale(1.06)}
+.art-body{padding:18px 18px 20px}
+.art-body .chip{margin-bottom:8px}
+.art-body h3{font-size:1.18rem;color:var(--maroon-deep)}
+.art-body p{font-size:12.5px;color:var(--muted);margin-top:5px}
+/* ========== 15 · LEADERSHIP ========== */
+#leadership{background:linear-gradient(180deg,var(--ivory),var(--ivory-2))}
+.pm-band{display:grid;grid-template-columns:300px 1fr;gap:48px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:44px 48px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+.pm-band::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--saffron) 0 34%,#fff 34% 66%,#2E7D5B 66% 100%)}
+.pm-photo{width:230px;height:230px;border-radius:50%;overflow:hidden;border:6px solid #fff;box-shadow:var(--shadow-md);margin-inline:auto;background:var(--maroon-deep);position:relative}
+.pm-photo img{width:100%;height:100%;object-fit:cover;object-position:50% 18%}
+.pm-photo.no-photo img{display:none}
+.pm-photo.no-photo::after{content:"Official portrait · add pm-modi.jpg";position:absolute;inset:8px;border:1px dashed rgba(247,241,228,.4);border-radius:50%;display:grid;place-items:center;color:rgba(247,241,228,.8);font-size:11px;text-align:center;padding:16px}
+.pm-quote blockquote{font-family:var(--serif);font-size:clamp(1.25rem,2.4vw,1.8rem);line-height:1.5;color:var(--maroon-deep);font-style:italic}
+.pm-attr{margin-top:18px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.pm-attr b{font-size:15px;color:var(--maroon-deep)}
+.pm-attr span{font-size:12px;color:var(--faint);letter-spacing:.06em}
+.ministers{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:30px}
+.min-card{display:flex;gap:22px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px;align-items:center;transition:transform .35s var(--ease),box-shadow .35s}
+.min-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.min-photo{flex:none;width:120px;height:150px;border-radius:10px;overflow:hidden;border:4px solid #fff;box-shadow:var(--shadow-sm);background:var(--maroon-deep);position:relative}
+.min-photo img{width:100%;height:100%;object-fit:cover}
+.min-photo.rao img{object-position:0% 40%}
+.min-photo.no-photo img{display:none}
+.min-photo.no-photo::after{content:"Portrait placeholder";position:absolute;inset:6px;border:1px dashed rgba(247,241,228,.4);border-radius:6px;display:grid;place-items:center;color:rgba(247,241,228,.8);font-size:10px;text-align:center}
+.min-card h3{font-size:1.35rem;color:var(--maroon-deep)}
+.min-card .role{font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--maroon);font-weight:700;margin:4px 0 8px}
+.min-card p{font-size:12.5px;color:var(--muted)}
+/* ========== 16 · ARCHIVES ========== */
+.res-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.res-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:22px;display:flex;flex-direction:column;gap:12px;transition:transform .35s var(--ease),box-shadow .35s}
+.res-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.doc-ic{width:44px;height:54px;position:relative;background:var(--maroon-deep);border-radius:6px;display:grid;place-items:center;color:var(--gold-2);font-size:10px;font-weight:700;letter-spacing:.08em}
+.doc-ic::after{content:"";position:absolute;top:0;right:0;border:9px solid;border-color:var(--gold) var(--gold) transparent transparent;border-radius:0 6px 0 0}
+.res-card h3{font-size:1rem;line-height:1.4;color:var(--maroon-deep);font-family:var(--sans);font-weight:700}
+.res-meta{font-size:11px;color:var(--faint)}
+.dl{margin-top:auto;display:inline-flex;align-items:center;gap:9px;font-size:12.5px;font-weight:700;color:var(--maroon-deep);border-top:1px solid var(--line);padding-top:12px;width:100%;transition:color .3s}
+.dl:hover{color:var(--gold)}
+.inst-strip{margin-top:34px;display:grid;grid-template-columns:repeat(6,1fr);gap:12px}
+.inst{border:1px solid var(--line);border-radius:10px;padding:14px 16px;background:var(--paper);display:flex;flex-direction:column;gap:2px;transition:.3s;font-size:12.5px;font-weight:600;color:var(--maroon-deep)}
+.inst span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint);font-weight:700}
+.inst:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:var(--shadow-sm)}
+/* ========== 17 · CTA + FOOTER ========== */
+.cta-band{position:relative;color:var(--ivory);padding:92px 0;overflow:hidden;background:var(--maroon-deep)}
+.cta-bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.24}
+.cta-band::after{content:"";position:absolute;inset:0;background:linear-gradient(100deg,rgba(82,23,33,.95) 30%,rgba(82,23,33,.5))}
+.cta-band .wrap{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap}
+.cta-band .hi-big{font-family:var(--hindi);font-size:clamp(2rem,4.6vw,3.4rem);line-height:1.25}
+.cta-band .en{color:rgba(247,241,228,.72);margin-top:10px;max-width:44ch}
+footer{background:#241512;color:rgba(247,241,228,.72);font-size:14px}
+.foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1.3fr;gap:46px;padding:70px 0 54px}
+.foot-brand p{margin-top:14px;font-size:13px;color:rgba(247,241,228,.55);max-width:34ch}
+.foot-disclaim{margin-top:20px;font-size:12px;line-height:1.6;color:rgba(247,241,228,.6);border:1px dashed rgba(247,241,228,.28);border-radius:10px;padding:14px 16px}
+.foot-disclaim b{color:var(--gold-2)}
+footer h4{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(247,241,228,.45);margin-bottom:18px}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:11px}
+footer ul a:hover{color:var(--gold-2)}
+.foot-contact address{font-style:normal;line-height:1.9;font-size:13.5px}
+.foot-contact .tag{color:var(--gold-2);font-size:10px;letter-spacing:.14em;text-transform:uppercase}
+.news-form{margin-top:20px;display:flex;gap:8px}
+.news-form input{flex:1;min-width:0;background:rgba(247,241,228,.07);border:1px solid rgba(247,241,228,.2);border-radius:999px;padding:11px 18px;color:var(--ivory);font:inherit;font-size:13px}
+.news-form button{flex:none;padding:11px 20px;border-radius:999px;background:var(--gold);color:#241512;font-weight:700;font-size:13px;transition:.3s}
+.news-form button:hover{background:var(--gold-2)}
+.form-note{font-size:11px;color:rgba(247,241,228,.4);margin-top:10px}
+.foot-ok{color:#9ED3A8;font-size:13.5px}
+.foot-bottom{border-top:1px solid rgba(247,241,228,.12);padding:22px 0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;color:rgba(247,241,228,.45)}
+/* ========== 18 · PILL + TOAST ========== */
+#disclaimPill{position:fixed;left:16px;bottom:16px;z-index:260;display:flex;align-items:center;gap:9px;background:rgba(82,23,33,.95);color:rgba(247,241,228,.92);font-size:11px;line-height:1.45;padding:9px 15px;border-radius:999px;max-width:min(430px,86vw);box-shadow:var(--shadow-md);backdrop-filter:blur(6px)}
+#disclaimPill .dot{flex:none;width:8px;height:8px;border-radius:50%;background:var(--gold-2);animation:pulse 2.4s infinite}
+#disclaimPill .short{display:none}
+#toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,80px);z-index:280;background:var(--maroon-deep);color:var(--ivory);padding:13px 24px;border-radius:999px;font-size:13.5px;box-shadow:var(--shadow-md);opacity:0;transition:transform .45s var(--ease),opacity .45s;max-width:88vw;text-align:center}
+#toast.show{transform:translate(-50%,0);opacity:1}
+/* ========== 19 · RESPONSIVE ========== */
+@media (max-width:1080px){
+  .disc{grid-column:span 6}.disc.wide{grid-column:span 12}
+  .gal{grid-template-columns:repeat(3,1fr)}
+  .art-grid{grid-template-columns:1fr 1fr}
+  .res-grid{grid-template-columns:1fr 1fr}
+  .fest-grid{grid-template-columns:repeat(3,1fr)}
+  .inst-strip{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:920px){
+  nav.main-menu{position:fixed;inset:calc(64px + var(--noticeH)) 0 auto 0;background:var(--paper);border-bottom:1px solid var(--line);box-shadow:var(--shadow-md);padding:10px 4vw 22px;transform:translateY(-130%);transition:transform .45s var(--ease)}
+  header.open nav.main-menu{transform:none}
+  nav.main-menu ul{flex-direction:column;align-items:stretch;gap:2px}
+  nav.main-menu a{font-size:16px;padding:13px 8px;border-bottom:1px solid var(--line-soft)}
+  nav.main-menu a::after{display:none}
+  .nav-cta{margin:12px 8px 0;text-align:center;border-radius:12px}
+  #menuBtn{display:block}
+  .hero .wrap{grid-template-columns:1fr;gap:56px}
+  .hero-media{height:460px;max-width:560px}
+  #stories .wrap{grid-template-columns:1fr;gap:44px}
+  .stories-sticky{position:static}
+  .pm-band{grid-template-columns:1fr;padding:34px 26px;text-align:center}
+  .ministers{grid-template-columns:1fr}
+  .ev{grid-template-columns:90px 1fr;gap:14px}
+  .ev a.btn{grid-column:2}
+  .foot-grid{grid-template-columns:1fr 1fr}
+}
+@media (max-width:640px){
+  .sect{padding:74px 0}
+  .gal{grid-template-columns:1fr 1fr;grid-auto-rows:170px}
+  .art-grid,.res-grid,.fest-grid,.inst-strip{grid-template-columns:1fr}
+  .hero-media{height:400px}
+  .hm-3{display:none}
+  .hm-note{width:170px}
+  .foot-grid{grid-template-columns:1fr}
+  #disclaimPill .long{display:none}
+  #disclaimPill .short{display:inline}
+  .intro-title{letter-spacing:.1em}
+  .ev{grid-template-columns:1fr}
+  .ev-date{border:0;text-align:left;padding:0;display:flex;gap:8px;align-items:baseline}
+}
+/* ========== 20 · REDUCED MOTION ========== */
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s !important;animation-iteration-count:1 !important;transition-duration:.001s !important}
+  .js .rv,.js .lm>span{opacity:1 !important;transform:none !important}
+  .emblem-img,.intro-gov,.intro-cta,.intro-note,.emblem-cap{opacity:1 !important;transform:none !important;visibility:visible !important}
+  .intro-rule{width:min(320px,60vw)}
+  .intro-float,#introCanvas{display:none}
+  .ticker-view{overflow-x:auto}.ticker-track{animation:none !important}
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<div id="progress" aria-hidden="true"></div>
+
+<!-- ornamental motif symbol (jali-star) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="jaliSym" viewBox="0 0 100 100">
+    <g fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="30"/>
+      <path d="M50 4 L58 42 L96 50 L58 58 L50 96 L42 58 L4 50 L42 42 Z"/>
+      <path d="M18 18 L40 40 M82 18 L60 40 M82 82 L60 60 M18 82 L40 60"/>
+    </g>
+  </symbol>
+</svg>
+
+<!-- ================= INTRO · DIGITAL MUSEUM ================= -->
+<div id="intro" role="dialog" aria-label="Opening sequence — Ministry of Culture concept">
+  <button id="skipBtn" type="button">Skip intro →</button>
+  <canvas id="introCanvas" aria-hidden="true"></canvas>
+  <div class="intro-glow" aria-hidden="true"></div>
+  <div class="intro-float" aria-hidden="true"></div>
+  <div class="intro-stack">
+    <div class="emblem-wrap" id="emblemWrap">
+      <img class="emblem-img" id="emblemImg" alt="National Emblem of India — the Lion Capital of Ashoka"
+           src="https://commons.wikimedia.org/wiki/Special:FilePath/Emblem_of_India.svg?width=520"
+           onerror="this.style.display='none'">
+      <div class="emb-fallback">सत्यमेव जयते<br><span style="font-family:var(--sans);font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint)">National emblem · offline placeholder</span></div>
+    </div>
+    <p class="emblem-cap">सत्यमेव जयते</p>
+    <h1 class="intro-title"><span class="lm" style="--d:1.9s"><span>MINISTRY OF CULTURE</span></span></h1>
+    <p class="intro-gov">Government of India</p>
+    <div class="intro-rule" aria-hidden="true"></div>
+    <div class="intro-cta">
+      <button id="enterBtn" class="btn btn-solid" type="button">Explore India's Heritage <span class="arr">↓</span></button>
+    </div>
+    <p class="intro-note">An independent design concept · not an official website</p>
+  </div>
+</div>
+
+<!-- ================= HEADER ================= -->
+<header class="site" id="siteHeader">
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="Ministry of Culture — concept, home">
+      <span class="emb-slot" aria-hidden="true">
+        <span class="emb-fb">सत्य</span>
+        <img class="nav-emb" alt="" loading="lazy"
+             src="https://commons.wikimedia.org/wiki/Special:FilePath/Emblem_of_India.svg?width=120"
+             onload="this.classList.add('on')" onerror="this.style.display='none'">
+      </span>
+      <span>
+        <span class="brand-gov">Government of India</span><br>
+        <span class="brand-min">Ministry of Culture</span>
+        <span class="brand-hi"> · संस्कृति मंत्रालय — concept</span>
+      </span>
+    </a>
+    <button id="menuBtn" aria-expanded="false" aria-controls="mainMenu" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+    <nav class="main-menu" id="mainMenu" aria-label="Primary">
+      <ul>
+        <li><a href="#discover">Discover</a></li>
+        <li><a href="#heritage">Heritage</a></li>
+        <li><a href="#museums">Museums</a></li>
+        <li><a href="#events">Events</a></li>
+        <li><a href="#festivals">Festivals</a></li>
+        <li><a href="#artists">Artists</a></li>
+        <li><a href="#archives">Archives</a></li>
+        <li><a class="nav-cta" href="#leadership">Leadership</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <span class="hero-word" aria-hidden="true" data-px="0.04">संस्कृति</span>
+  <div class="wrap">
+    <div class="hero-copy">
+      <p class="kicker rv"><span class="hi">भारत की स्मृति</span> · India's living memory</p>
+      <h1>
+        <span class="lm" style="--d:.1s"><span>Culture is the memory</span></span>
+        <span class="lm" style="--d:.22s"><span>a nation keeps <em>alive.</em></span></span>
+      </h1>
+      <p class="hero-lead rv" style="--d:.35s">From cave shrines to concert halls, palm-leaf manuscripts to living looms —
+        the Ministry of Culture safeguards the many memories of India.
+        <strong>This is an independent concept of how that story could feel online.</strong></p>
+      <div class="hero-actions rv" style="--d:.45s">
+        <a class="btn btn-solid" href="#discover">Begin the discovery <span class="arr">→</span></a>
+        <a class="btn btn-ghost" href="#museums">Walk the museums</a>
+      </div>
+      <div class="hero-facts rv" style="--d:.55s">
+        <div><b>40+</b><span>UNESCO World Heritage Sites in India</span></div>
+        <div><b>22</b><span>Scheduled languages</span></div>
+        <div><b>8</b><span>Classical dance traditions</span></div>
+        <span class="lbl note-tag">General public facts · concept layout</span>
+      </div>
+    </div>
+    <div class="hero-media">
+      <figure class="hm hm-1" data-px="0.045"><img fetchpriority="high" alt="The Taj Mahal reflected in its water channel at dawn"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/34d5df342-f0b0-4d37-990d-94b838cd09945696.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/taj-mahal-dawn/720/960'"></figure>
+      <figure class="hm hm-2" data-px="0.09"><img loading="lazy" alt="A Bharatanatyam dancer in traditional costume mid-pose"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/24d5df342-f0b0-4d37-990d-94b838cd09945336.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/bharatanatyam-dancer/720/540'"></figure>
+      <figure class="hm hm-3" data-px="0.13"><img loading="lazy" alt="An antique palm-leaf manuscript with incised script"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/14d5df342-f0b0-4d37-990d-94b838cd09948785.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/palm-leaf-manuscript/500/500'"></figure>
+      <div class="hm-motif" aria-hidden="true"><svg><use href="#jaliSym"/></svg></div>
+      <div class="hm-note" data-px="0.07" role="note">
+        <b>Sample notice</b>
+        <p>Heritage walk series, winter season — illustrative listing for this concept.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TICKER ================= -->
+<div class="ticker" aria-label="Announcements ticker — sample content">
+  <div class="ticker-label"><i aria-hidden="true"></i> Announcements</div>
+  <div class="ticker-view"><div class="ticker-track" id="tickerTrack">
+    <span class="tick"><b>Real</b> The India Biennale'26 — Art | Architecture | Design, New Delhi · 4 Dec 2026 – 21 Mar 2027 (as listed on culture.gov.in) <time>Oct 2026</time></span>
+    <span class="tick"><b>Sample</b> National Crafts Mela — concept listing for demonstration <time>Oct 2026</time></span>
+    <span class="tick"><b>Sample</b> Manuscript conservation workshop series — illustrative <time>Sep 2026</time></span>
+    <span class="tick"><b>Sample</b> Repertory grant window for classical dance schools — concept <time>Sep 2026</time></span>
+    <span class="tick"><b>Sample</b> Museum lighting upgrade showcase — demonstration entry <time>Aug 2026</time></span>
+  </div></div>
+</div>
+
+<!-- ================= DISCOVER ================= -->
+<section class="sect" id="discover">
+  <div class="wrap">
+    <div class="sect-head">
+      <div>
+        <p class="kicker rv">01 · <span class="hi">अन्वेषण</span> · Discover</p>
+        <h2><span class="lm"><span>Eight doors into <em>one heritage</em></span></span></h2>
+      </div>
+      <span class="note-tag rv">Tap a door — the gallery below filters itself</span>
+    </div>
+    <div class="disc-grid">
+      <button class="disc wide rv" data-cat="art"><img loading="lazy" alt="A Mughal-style miniature painting of a court scene"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/44d5df342-f0b0-4d37-990d-94b838cd09949137.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/mughal-miniature-art/900/600'">
+        <span class="go" aria-hidden="true">→</span>
+        <span class="disc-body"><span class="hi">चित्रकला</span><h3>Art &amp; Miniature Painting</h3><p>Mughal, Rajasthani, Pahari and Company schools — pigment, gold and patience.</p></span></button>
+      <button class="disc rv" style="--d:.06s" data-cat="music"><img loading="lazy" alt="A Hindustani classical duo performing with sitar"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/54d5df342-f0b0-4d37-990d-94b838cd09946085.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/indian-classical-music/600/700'">
+        <span class="go" aria-hidden="true">→</span>
+        <span class="disc-body"><span class="hi">संगीत</span><h3>Classical Music</h3><p>Hindustani and Carnatic streams, raga and tala.</p></span></button>
+      <button class="disc rv" style="--d:.12s" data-cat="dance"><img loading="lazy" alt="A classical dancer in blue costume in a poised posture"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/04d5df342-f0b0-4d37-990d-94b838cd09946106.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/classical-dance-india/600/700'">
+        <span class="go" aria-hidden="true">→</span>
+        <span class="disc-body"><span class="hi">नृत्य</span><h3>Dance Forms</h3><p>Bharatanatyam, Kathak, Odissi, Kathakali and more.</p></span></button>
+      <button class="disc rv" data-cat="lit"><img loading="lazy" alt="Palm-leaf manuscript folios tied with cord"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/14d5df342-f0b0-4d37-990d-94b838cd09948785.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/indian-manuscripts/600/700'">
+        <span class="go" aria-hidden="true">→</span>
+        <span class="disc-body"><span class="hi">साहित्य</span><h3>Literature &amp; Manuscripts</h3><p>Palm-leaf, birch-bark and paper — memory in script.</p></span></button>
+      <button class="disc rv" style="--d:.06s" data-cat="arch"><img loading="lazy" alt="The stone chariot of Vittala Temple at Hampi"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/34d5df342-f0b0-4d37-990d-94b838cd09941303.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/hampi-monument/600/700'">
+        <span class="go" aria-hidden="true">→</span>
+        <span class="disc-body"><span class="hi">स्थापत्य</span><h3>Architecture &amp; Monuments</h3><p>Temples, forts, tombs and stepwells in stone.</p></span></button>
+      <button class="disc rv" style="--d:.12s" data-cat="museums"><img loading="lazy" alt="A sculpture displayed in the National Museum hall, New Delhi"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/44d5df342-f0b0-4d37-990d-94b838cd09943828.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/national-museum-delhi/600/700'">
+        <span class="go" aria-hidden="true">→</span>
+        <span class="disc-body"><span class="hi">संग्रहालय</span><h3>Museums</h3><p>Collections that keep objects in conversation.</p></span></button>
+      <button class="disc rv" style="--d:.18s" data-cat="crafts"><img loading="lazy" alt="Hands arranging coloured warp threads on a handloom"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/54d5df342-f0b0-4d37-990d-94b838cd09947329.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/indian-handloom-craft/600/700'">
+        <span class="go" aria-hidden="true">→</span>
+        <span class="disc-body"><span class="hi">शिल्प</span><h3>Crafts &amp; Textiles</h3><p>Looms, kilns, chisels and living artisan lines.</p></span></button>
+      <button class="disc wide rv" style="--d:.24s" data-cat="fest"><img loading="lazy" alt="An aerial night view of river ghats lit with countless festival lamps"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/34d5df342-f0b0-4d37-990d-94b838cd09942245.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/india-festival-lights/900/600'">
+        <span class="go" aria-hidden="true">→</span>
+        <span class="disc-body"><span class="hi">परंपराएँ</span><h3>Festivals &amp; Living Traditions</h3><p>Seasons, rituals and public joy passed hand to hand across regions.</p></span></button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= HERITAGE GALLERY ================= -->
+<section class="sect" id="heritage">
+  <div class="wrap">
+    <div class="sect-head">
+      <div>
+        <p class="kicker rv">02 · <span class="hi">धरोहर</span> · Heritage gallery</p>
+        <h2><span class="lm"><span>A wall of <em>kept things</em></span></span></h2>
+      </div>
+      <span class="note-tag rv">Openly-licensed public imagery · illustrative curation</span>
+    </div>
+    <div class="filters rv" role="group" aria-label="Filter heritage gallery">
+      <button data-f="all" aria-pressed="true">All</button>
+      <button data-f="art" aria-pressed="false">Art</button>
+      <button data-f="music" aria-pressed="false">Music</button>
+      <button data-f="dance" aria-pressed="false">Dance</button>
+      <button data-f="lit" aria-pressed="false">Manuscripts</button>
+      <button data-f="arch" aria-pressed="false">Monuments</button>
+      <button data-f="museums" aria-pressed="false">Museums</button>
+      <button data-f="crafts" aria-pressed="false">Crafts</button>
+      <button data-f="fest" aria-pressed="false">Festivals</button>
+    </div>
+    <div class="gal rv" id="gal">
+      <figure class="tall" data-cat="arch"><img loading="lazy" alt="The carved stone wheel of the Konark Sun Temple at golden hour"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/54d5df342-f0b0-4d37-990d-94b838cd09941575.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/konark-wheel/600/900'"><figcaption><b>Konark Sun Temple</b><span>Odisha · Monument</span></figcaption></figure>
+      <figure data-cat="dance"><img loading="lazy" alt="Kathakali performers in traditional costume and makeup, Kerala"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/34d5df342-f0b0-4d37-990d-94b838cd09947383.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/kathakali-kerala/600/450'"><figcaption><b>Kathakali</b><span>Kerala · Dance</span></figcaption></figure>
+      <figure data-cat="art"><img loading="lazy" alt="A Mughal miniature painting with ornate floral borders"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/54d5df342-f0b0-4d37-990d-94b838cd09945811.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/mughal-miniature/600/450'"><figcaption><b>Miniature tradition</b><span>Art</span></figcaption></figure>
+      <figure class="wide" data-cat="fest"><img loading="lazy" alt="Festival lamps and miniature traditions of India"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/64d5df342-f0b0-4d37-990d-94b838cd09947877.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/diwali-diyas/900/450'"><figcaption><b>Festival lamps &amp; miniature traditions</b><span>Festivals</span></figcaption></figure>
+      <figure data-cat="music"><img loading="lazy" alt="A sitar recital in progress on a darkened stage"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/14d5df342-f0b0-4d37-990d-94b838cd09947997.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/sitar-recital/600/450'"><figcaption><b>Sitar recital</b><span>Music</span></figcaption></figure>
+      <figure class="tall" data-cat="lit"><img loading="lazy" alt="An illustrated palm-leaf manuscript folio"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/44d5df342-f0b0-4d37-990d-94b838cd09949231.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/manuscript-folio/600/900'"><figcaption><b>Palm-leaf folio</b><span>Manuscripts</span></figcaption></figure>
+      <figure data-cat="arch"><img loading="lazy" alt="The elephant stables of Hampi with domed bays"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/64d5df342-f0b0-4d37-990d-94b838cd09946351.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/hampi-stables/600/450'"><figcaption><b>Elephant Stables, Hampi</b><span>Karnataka · Monument</span></figcaption></figure>
+      <figure data-cat="museums"><img loading="lazy" alt="Terracotta sculptures in an open-air crafts museum courtyard"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/14d5df342-f0b0-4d37-990d-94b838cd09948431.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/crafts-museum/600/450'"><figcaption><b>Crafts museum courtyard</b><span>Museums</span></figcaption></figure>
+      <figure data-cat="crafts"><img loading="lazy" alt="A weaver's shuttle and pale warp threads on a loom"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/24d5df342-f0b0-4d37-990d-94b838cd09947613.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/handloom-weaving/600/450'"><figcaption><b>Handloom warp</b><span>Crafts</span></figcaption></figure>
+      <figure data-cat="dance"><img loading="lazy" alt="Two Bharatanatyam dancers in a synchronized stage pose"
+        src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/44d5df342-f0b0-4d37-990d-94b838cd09944098.png"
+        onerror="this.onerror=null;this.src='https://picsum.photos/seed/bharatanatyam-duet/600/450'"><figcaption><b>Stage duet</b><span>Dance</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ================= MUSEUMS & MONUMENTS RAIL ================= -->
+<section class="sect" id="museums">
+  <div class="wrap">
+    <div class="sect-head">
+      <div>
+        <p class="kicker on-dark rv">03 · <span class="hi">संग्रहालय व स्मारक</span> · Museums &amp; monuments</p>
+        <h2><span class="lm"><span>Rooms and ruins that <em style="color:var(--gold-2)">remember</em></span></span></h2>
+        <p class="rv" style="margin-top:14px">Real institutions and sites, linked to their official custodians where available.</p>
+      </div>
+      <div class="rail-ctl rv">
+        <button id="railPrev" type="button" aria-label="Scroll left">←</button>
+        <button id="railNext" type="button" aria-label="Scroll right">→</button>
+      </div>
+    </div>
+    <div class="rail rv" id="rail" tabindex="0" aria-label="Museums and monuments carousel">
+      <article class="mus-card">
+        <div class="mus-img"><img loading="lazy" alt="The octagonal hall of the National Museum, New Delhi"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/44d5df342-f0b0-4d37-990d-94b838cd09943828.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/national-museum-hall/640/480'"></div>
+        <div class="mus-body"><span class="chip">Museum · New Delhi</span><h3>National Museum</h3><p>From Harappan bronze to miniature paintings — five millennia under one roof.</p><a href="https://nationalmuseumindia.gov.in" target="_blank" rel="noopener">Official site <i>↗</i></a></div>
+      </article>
+      <article class="mus-card">
+        <div class="mus-img"><img loading="lazy" alt="The Taj Mahal across its reflecting pool"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/34d5df342-f0b0-4d37-990d-94b838cd09945696.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/taj-mahal-agra/640/480'"></div>
+        <div class="mus-body"><span class="chip">Monument · Agra</span><h3>Taj Mahal</h3><p>Mughal mausoleum on the Yamuna — UNESCO World Heritage Site.</p><a href="https://asi.nic.in" target="_blank" rel="noopener">ASI custodianship <i>↗</i></a></div>
+      </article>
+      <article class="mus-card">
+        <div class="mus-img"><img loading="lazy" alt="The stone chariot at Vittala Temple complex, Hampi"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/34d5df342-f0b0-4d37-990d-94b838cd09941303.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/hampi-vittala/640/480'"></div>
+        <div class="mus-body"><span class="chip">Monument · Karnataka</span><h3>Group of Monuments, Hampi</h3><p>Vijayanagara's stone city — chariot, colonnades and bazaar streets.</p><a href="https://whc.unesco.org/en/statesparties/in" target="_blank" rel="noopener">UNESCO list <i>↗</i></a></div>
+      </article>
+      <article class="mus-card">
+        <div class="mus-img"><img loading="lazy" alt="Carved wheel and walls of the Konark Sun Temple"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/54d5df342-f0b0-4d37-990d-94b838cd09941575.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/konark-temple/640/480'"></div>
+        <div class="mus-body"><span class="chip">Monument · Odisha</span><h3>Konark Sun Temple</h3><p>A thirteen-wheeled chariot of stone frozen mid-procession.</p><a href="https://asi.nic.in" target="_blank" rel="noopener">ASI custodianship <i>↗</i></a></div>
+      </article>
+      <article class="mus-card">
+        <div class="mus-img"><img loading="lazy" alt="Terracotta figures in a crafts museum garden"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/14d5df342-f0b0-4d37-990d-94b838cd09948431.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/crafts-museum-delhi/640/480'"></div>
+        <div class="mus-body"><span class="chip">Museum · New Delhi</span><h3>Crafts Museum courtyard</h3><p>Terracotta guardians and village-built galleries of living craft.</p><a href="#artists">Meet the makers <i>→</i></a></div>
+      </article>
+      <article class="mus-card">
+        <div class="mus-img"><img loading="lazy" alt="A bronze sculpture from a museum collection"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/04d5df342-f0b0-4d37-990d-94b838cd09944302.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/museum-bronze/640/480'"></div>
+        <div class="mus-body"><span class="chip">Collection</span><h3>Bronze &amp; sculpture galleries</h3><p>Chola-lineage bronzes and stone icons in quiet, lit conversation.</p><a href="#archives">Study the archives <i>→</i></a></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STORIES (sticky two-column) ================= -->
+<section class="sect" id="stories">
+  <div class="wrap">
+    <div class="stories-sticky">
+      <p class="kicker rv">04 · <span class="hi">चार अध्याय</span> · Four chapters</p>
+      <h2><span class="lm"><span>Heritage, told in <em>four materials</em></span></span></h2>
+      <p class="rv">Stone that outlives empires, leaf that outlives libraries, sound that outlives its players, and movement that outlives its choreographers.</p>
+      <p class="rv" style="margin-top:22px"><span class="note-tag">Editorial storytelling · concept</span></p>
+    </div>
+    <div class="chapters">
+      <article class="chapter rv">
+        <figure><img loading="lazy" alt="Golden light on the Konark Sun Temple wheel"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/54d5df342-f0b0-4d37-990d-94b838cd09941575.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/stone-chapter/900/500'"></figure>
+        <div class="chapter-body"><span class="no">CHAPTER I</span><h3>Stone</h3><p>Temples, stupas and forts — India's longest memory is carved, not written. Conservation keeps the carve legible.</p></div>
+      </article>
+      <article class="chapter rv">
+        <figure><img loading="lazy" alt="Palm-leaf manuscript bundle with cord binding"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/14d5df342-f0b0-4d37-990d-94b838cd09948785.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/leaf-chapter/900/500'"></figure>
+        <div class="chapter-body"><span class="no">CHAPTER II</span><h3>Leaf</h3><p>Palm-leaf and birch-bark manuscripts carry grammar, medicine and poetry — fragile archives now being digitised leaf by leaf.</p></div>
+      </article>
+      <article class="chapter rv">
+        <figure><img loading="lazy" alt="Archival black-and-white photograph of a sitar maestro mid-recital"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/44d5df342-f0b0-4d37-990d-94b838cd09945697.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/sound-chapter/900/500'"></figure>
+        <div class="chapter-body"><span class="no">CHAPTER III</span><h3>Sound</h3><p>Raga is architecture in time. Archival recordings keep the masters in the room for students not yet born.</p></div>
+      </article>
+      <article class="chapter rv">
+        <figure><img loading="lazy" alt="Two classical dancers mid-movement on stage"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/44d5df342-f0b0-4d37-990d-94b838cd09944098.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/movement-chapter/900/500'"></figure>
+        <div class="chapter-body"><span class="no">CHAPTER IV</span><h3>Movement</h3><p>Dance holds scripture in the body — mudra, tala and stance passed guru to shishya, unbroken.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= EVENTS ================= -->
+<section class="sect" id="events">
+  <div class="wrap">
+    <div class="sect-head">
+      <div>
+        <p class="kicker rv">05 · <span class="hi">आयोजन</span> · Events &amp; exhibitions</p>
+        <h2><span class="lm"><span>What's on the <em>calendar</em></span></span></h2>
+      </div>
+      <span class="note-tag rv">One real listing (sourced) + clearly labelled samples</span>
+    </div>
+    <div class="ev-list">
+      <div class="ev rv">
+        <div class="ev-date"><b>04</b><span>Dec 2026</span></div>
+        <div><h3>The India Biennale'26 — Art | Architecture | Design</h3>
+          <p>New Delhi · 4 December 2026 – 21 March 2027 · exhibitions, experiences, conversations and student biennale.</p>
+          <div class="chips"><span class="chip chip-gold">Real · as listed on culture.gov.in</span><span class="chip chip-dark">Exhibition</span></div>
+        </div>
+        <a class="btn btn-ghost" href="https://indiabiennale.culture.gov.in" target="_blank" rel="noopener">Official listing ↗</a>
+      </div>
+      <div class="ev rv" style="--d:.08s">
+        <div class="ev-date"><b>18</b><span>Nov 2026</span></div>
+        <div><h3>National Crafts Mela — concept listing</h3>
+          <p>Illustrative: artisan stalls, live loom demonstrations and dye-garden walks for a winter weekend.</p>
+          <div class="chips"><span class="chip chip-maroon">Sample</span><span class="chip chip-dark">Crafts</span></div>
+        </div>
+        <a class="btn btn-ghost" href="#artists">Meet makers ↓</a>
+      </div>
+      <div class="ev rv" style="--d:.16s">
+        <div class="ev-date"><b>09</b><span>Jan 2027</span></div>
+        <div><h3>Manuscript Conservation Open Studio — concept listing</h3>
+          <p>Illustrative: conservators demonstrate leaf-cleaning, re-binding and digitisation in public sessions.</p>
+          <div class="chips"><span class="chip chip-maroon">Sample</span><span class="chip chip-dark">Workshop</span></div>
+        </div>
+        <a class="btn btn-ghost" href="#archives">See archives ↓</a>
+      </div>
+      <div class="ev rv" style="--d:.24s">
+        <div class="ev-date"><b>26</b><span>Feb 2027</span></div>
+        <div><h3>Repertory Season — classical dance schools — concept listing</h3>
+          <p>Illustrative: guru-led repertory companies share stage nights across four zones.</p>
+          <div class="chips"><span class="chip chip-maroon">Sample</span><span class="chip chip-dark">Performance</span></div>
+        </div>
+        <a class="btn btn-ghost" href="#heritage">View gallery ↓</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= FESTIVALS ================= -->
+<section class="sect" id="festivals">
+  <div class="wrap">
+    <div class="sect-head">
+      <div>
+        <p class="kicker rv">06 · <span class="hi">उत्सव</span> · Festivals &amp; living traditions</p>
+        <h2><span class="lm"><span>Five regions, <em>one calendar of joy</em></span></span></h2>
+      </div>
+      <span class="note-tag rv">Well-known public festivals · illustrative curation</span>
+    </div>
+    <div class="fest-grid">
+      <div class="fest rv"><span class="no">01</span><h3>North</h3><span class="st">Himalaya &amp; plains</span><ul><li>Losar</li><li>Phool Walon Ki Sair</li><li>Baisakhi</li></ul></div>
+      <div class="fest rv" style="--d:.07s"><span class="no">02</span><h3>South</h3><span class="st">Peninsula</span><ul><li>Pongal</li><li>Thrissur Pooram</li><li>Onam</li></ul></div>
+      <div class="fest rv" style="--d:.14s"><span class="no">03</span><h3>East</h3><span class="st">Delta &amp; coast</span><ul><li>Durga Puja (UNESCO intangible heritage)</li><li>Rath Yatra</li></ul></div>
+      <div class="fest rv" style="--d:.21s"><span class="no">04</span><h3>West</h3><span class="st">Desert &amp; seaboard</span><ul><li>Rann Utsav</li><li>Ganeshotsav</li></ul></div>
+      <div class="fest rv" style="--d:.28s"><span class="no">05</span><h3>North-East</h3><span class="st">Seven sisters</span><ul><li>Hornbill</li><li>Bihu</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ARTISTS ================= -->
+<section class="sect" id="artists">
+  <div class="wrap">
+    <div class="sect-head">
+      <div>
+        <p class="kicker rv">07 · <span class="hi">साधक</span> · Artists &amp; artisans</p>
+        <h2><span class="lm"><span>The hands that <em>keep it living</em></span></span></h2>
+      </div>
+      <span class="note-tag rv">Illustrative practitioner profiles — no real individuals named</span>
+    </div>
+    <div class="art-grid">
+      <article class="art rv">
+        <figure><img loading="lazy" alt="A Bharatanatyam dancer in profile with temple-jewellery detail"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/14d5df342-f0b0-4d37-990d-94b838cd09946019.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/dancer-profile/600/700'"></figure>
+        <div class="art-body"><span class="chip chip-maroon">Illustrative profile</span><h3>Bharatanatyam dancer · Thanjavur</h3><p>Repertory, abhinaya and the discipline of the arangetram stage.</p></div>
+      </article>
+      <article class="art rv" style="--d:.07s">
+        <figure><img loading="lazy" alt="A tabla player and sitarist in a jugalbandi performance"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/34d5df342-f0b0-4d37-990d-94b838cd09945272.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/tabla-sitar-duo/600/700'"></figure>
+        <div class="art-body"><span class="chip chip-maroon">Illustrative profile</span><h3>Sitar–tabla jugalbandi · Delhi gharana line</h3><p>Guru–shishya parampara carried into contemporary concert halls.</p></div>
+      </article>
+      <article class="art rv" style="--d:.14s">
+        <figure><img loading="lazy" alt="A woman winding yarn on a traditional spinning frame"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/44d5df342-f0b0-4d37-990d-94b838cd09942401.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/yarn-spinning-artisan/600/700'"></figure>
+        <div class="art-body"><span class="chip chip-maroon">Illustrative profile</span><h3>Handloom weaver · Kanchipuram belt</h3><p>Warp-counting, pit-looms and silk that remembers its village.</p></div>
+      </article>
+      <article class="art rv" style="--d:.21s">
+        <figure><img loading="lazy" alt="Kathakali performers in elaborate costume outdoors"
+          src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/04d5df342-f0b0-4d37-990d-94b838cd09946093.png"
+          onerror="this.onerror=null;this.src='https://picsum.photos/seed/kathakali-artists/600/700'"></figure>
+        <div class="art-body"><span class="chip chip-maroon">Illustrative profile</span><h3>Kathakali performer · Kerala kalari</h3><p>Night-long drama, mudra grammar and the chemistry of natural pigments.</p></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LEADERSHIP ================= -->
+<section class="sect" id="leadership">
+  <div class="wrap">
+    <div class="sect-head">
+      <div>
+        <p class="kicker rv">08 · <span class="hi">नेतृत्व</span> · Leadership</p>
+        <h2><span class="lm"><span>Stewards of the <em>public memory</em></span></span></h2>
+      </div>
+      <span class="note-tag rv">Names, titles &amp; quote as displayed on culture.gov.in (public information)</span>
+    </div>
+    <div class="pm-band rv">
+      <div class="pm-photo" id="pmPhoto"><img alt="Official photograph of Prime Minister Narendra Modi" src="" style="display:none"></div>
+      <div class="pm-quote">
+        <blockquote>“The Gyan Bharatam Mission will not only preserve manuscripts but also open new domains of research, innovation, and data-driven opportunities for the youth, making our heritage a source of strength and power for the future.”</blockquote>
+        <div class="pm-attr"><b>नरेन्द्र मोदी · Narendra Modi</b><span>Prime Minister of India · International Conference on Gyan Bharatam, New Delhi · 12.09.2025 · as featured on culture.gov.in</span></div>
+      </div>
+    </div>
+    <div class="ministers">
+      <div class="min-card rv">
+        <div class="min-photo" id="minPhoto1"><img alt="Portrait of Shri Gajendra Singh Shekhawat" src="" style="display:none"></div>
+        <div><h3>Shri Gajendra Singh Shekhawat</h3><p class="role">Hon'ble Minister of Culture</p><p>Portrait: public press photograph, as displayed on the official portal.</p></div>
+      </div>
+      <div class="min-card rv" style="--d:.1s">
+        <div class="min-photo rao" id="minPhoto2"><img alt="Portrait of Rao Inderjit Singh" src="" style="display:none"></div>
+        <div><h3>Rao Inderjit Singh</h3><p class="role">Hon'ble Minister of State for Culture</p><p>Portrait: public press photograph, as displayed on the official portal.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ARCHIVES ================= -->
+<section class="sect" id="archives">
+  <div class="wrap">
+    <div class="sect-head">
+      <div>
+        <p class="kicker rv">09 · <span class="hi">अभिलेख</span> · Publications &amp; archives</p>
+        <h2><span class="lm"><span>Paper, proof and <em>public record</em></span></span></h2>
+      </div>
+      <span class="note-tag rv">Downloads generate labelled demo files in your browser</span>
+    </div>
+    <div class="res-grid">
+      <div class="res-card rv"><span class="doc-ic">PDF</span><h3>Draft Concept — Annual Heritage Report 2025–26</h3><p class="res-meta">Sample · 3.1 MB · English / हिन्दी</p><button class="dl" type="button" data-name="Annual Heritage Report 2025-26 (Concept)">⤓ Download sample</button></div>
+      <div class="res-card rv" style="--d:.07s"><span class="doc-ic">PDF</span><h3>Sample Guidelines — Monument Conservation Grants</h3><p class="res-meta">Sample · 1.4 MB · English</p><button class="dl" type="button" data-name="Monument Conservation Guidelines (Sample)">⤓ Download sample</button></div>
+      <div class="res-card rv" style="--d:.14s"><span class="doc-ic">PDF</span><h3>Template — Museum Label &amp; Didactic Panel Style</h3><p class="res-meta">Template · 720 KB · English</p><button class="dl" type="button" data-name="Museum Label Style Template">⤓ Download sample</button></div>
+      <div class="res-card rv" style="--d:.21s"><span class="doc-ic">PDF</span><h3>Sample Circular — Festival Season Cultural Calendar</h3><p class="res-meta">Sample · 940 KB · English / हिन्दी</p><button class="dl" type="button" data-name="Festival Calendar Circular (Sample)">⤓ Download sample</button></div>
+    </div>
+    <div class="inst-strip rv">
+      <a class="inst" href="https://ignca.gov.in" target="_blank" rel="noopener"><span>Archive</span>IGNCA ↗</a>
+      <a class="inst" href="https://sangeetnatak.gov.in" target="_blank" rel="noopener"><span>Academi</span>Sangeet Natak ↗</a>
+      <a class="inst" href="https://sahityakacademi.gov.in" target="_blank" rel="noopener"><span>Academi</span>Sahitya Akademi ↗</a>
+      <a class="inst" href="https://asi.nic.in" target="_blank" rel="noopener"><span>Custodian</span>ASI ↗</a>
+      <a class="inst" href="https://nationalmuseumindia.gov.in" target="_blank" rel="noopener"><span>Museum</span>National Museum ↗</a>
+      <a class="inst" href="https://www.culture.gov.in" target="_blank" rel="noopener"><span>Official</span>culture.gov.in ↗</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CTA ================= -->
+<section class="cta-band" id="about-concept">
+  <img class="cta-bg" loading="lazy" alt=""
+       src="https://image.qwenlm.ai/public_source/a1246d4a-470c-4680-8c7d-910baae3cd4e/34d5df342-f0b0-4d37-990d-94b838cd09942245.png"
+       onerror="this.onerror=null;this.src='https://picsum.photos/seed/india-heritage-night/1800/900'">
+  <div class="wrap">
+    <div>
+      <p class="hi-big rv">स्मृति ही संस्कृति है।</p>
+      <p class="en rv">Memory is culture. Replay the museum opening, or walk the galleries once more.</p>
+    </div>
+    <div class="cta-actions rv">
+      <button class="btn btn-light" id="replayBtn" type="button">↺ Replay opening sequence</button>
+      <a class="btn btn-solid" style="background:var(--gold);color:#241512" href="#discover">Back to discovery <span class="arr">↑</span></a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer id="contact">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-brand">
+        <span style="font-family:var(--serif);font-size:24px;color:var(--ivory)">Ministry of Culture</span>
+        <p style="font-family:var(--hindi);font-size:14px;color:rgba(247,241,228,.6);margin-top:4px">संस्कृति मंत्रालय · भारत सरकार — concept</p>
+        <p>A cinematic redesign concept exploring how a national culture portal could feel — museum-quiet, editorial and alive.</p>
+        <div class="foot-disclaim"><b>Disclaimer:</b> This is an independent, unofficial design concept created for a developer portfolio. It is <b>not affiliated with, endorsed by, or connected to the Government of India</b>. The National Emblem appears as illustrative reference; leadership names/titles and the quoted statement reproduce public information from culture.gov.in; all sample events and documents are labelled demonstrations. Photography: openly-licensed public &amp; press sources.</div>
+      </div>
+      <div>
+        <h4>Discover</h4>
+        <ul>
+          <li><a href="#discover">Cultural doors</a></li>
+          <li><a href="#heritage">Heritage gallery</a></li>
+          <li><a href="#museums">Museums &amp; monuments</a></li>
+          <li><a href="#stories">Four chapters</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Participate</h4>
+        <ul>
+          <li><a href="#events">Events &amp; exhibitions</a></li>
+          <li><a href="#festivals">Festivals</a></li>
+          <li><a href="#artists">Artists &amp; artisans</a></li>
+          <li><a href="#archives">Publications</a></li>
+          <li><a href="#leadership">Leadership</a></li>
+        </ul>
+      </div>
+      <div class="foot-contact">
+        <h4>Contact <span class="tag">· demo placeholder</span></h4>
+        <address>Concept Studio, Illustrative Lane,<br>New Delhi 110 001 — placeholder<br>hello@concept-studio.example<br>+91 00000 00000 (placeholder)</address>
+        <form class="news-form" id="conceptForm" novalidate>
+          <input type="email" id="conceptEmail" placeholder="Follow this concept (demo)" aria-label="Email address (demo form)">
+          <button type="submit">Follow</button>
+        </form>
+        <p class="form-note" id="formNote">Demo form — nothing is sent or stored.</p>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 · Independent portfolio concept · HTML / CSS / Vanilla JS / three.js</span>
+      <span>Not affiliated with or endorsed by the Government of India</span>
+    </div>
+  </div>
+</footer>
+
+<div id="disclaimPill" role="note" title="Independent, unofficial portfolio concept — not affiliated with or endorsed by the Government of India.">
+  <span class="dot" aria-hidden="true"></span>
+  <span class="long">Independent portfolio concept — not affiliated with or endorsed by the Government of India.</span>
+  <span class="short">Unofficial concept</span>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<noscript><style>#intro{display:none!important}html.intro-lock body{overflow:auto!important}.js .rv,.js .lm>span{opacity:1!important;transform:none!important}</style></noscript>
+
+<!-- three.js (optional enhancement — intro degrades gracefully without it) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" onerror="window.__noThree=true"></script>
+<script>
+(function(){
+'use strict';
+var $=function(s,c){return (c||document).querySelector(s);};
+var $$=function(s,c){return Array.from((c||document).querySelectorAll(s));};
+var reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+document.documentElement.classList.add('js');
+var intro=$('#intro'), entered=false;
+function toast(m){var t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(function(){t.classList.remove('show');},3200);}
+function rnd(a,b){return a+Math.random()*(b-a);}
+
+/* ---------- notice bar height sync ---------- */
+(function(){
+  var bar=document.createElement('div');
+  bar.id='noticeBar'; bar.setAttribute('role','note');
+  bar.innerHTML='<i class="ic" aria-hidden="true">!</i><span><b>Unofficial concept:</b> independent design-portfolio piece — <b>NOT</b> the official website of the Ministry of Culture, Government of India. Official site: <a href="https://www.culture.gov.in" target="_blank" rel="noopener">culture.gov.in ↗</a></span>';
+  document.body.insertBefore(bar,document.body.firstChild);
+  function fit(){document.documentElement.style.setProperty('--noticeH',bar.offsetHeight+'px');}
+  fit(); addEventListener('resize',fit); addEventListener('load',fit);
+})();
+
+/* ---------- emblem resolver: local → Wikipedia REST → clean placeholder ---------- */
+function probe(src){return new Promise(function(res){var i=new Image();i.onload=function(){res(src);};i.onerror=function(){res(null);};i.src=src;});}
+function wikiImage(title){
+  return fetch('https://en.wikipedia.org/api/rest_v1/page/summary/'+encodeURIComponent(title))
+    .then(function(r){return r.json();})
+    .then(function(j){return (j.originalimage&&j.originalimage.source)||(j.thumbnail&&j.thumbnail.source)||null;})
+    .catch(function(){return null;});
+}
+function resolveEmblem(){
+  probe('emblem.png').then(function(u){
+    if(u)return u;
+    return wikiImage('Emblem_of_India').then(function(u2){return u2?probe(u2):null;});
+  }).then(function(u){
+    var img=$('#emblemImg'), wrap=$('#emblemWrap'), nav=$('.nav-emb');
+    if(u){ if(img){img.onerror=function(){img.style.display='none';wrap.classList.add('no-emb');};img.style.display='';img.src=u;} if(nav){nav.src=u;nav.classList.add('on');} }
+    else { if(img)img.style.display='none'; wrap.classList.add('no-emb'); if(nav)nav.style.display='none'; }
+  });
+}
+resolveEmblem();
+
+/* ---------- leadership + PM portraits: local → Wikipedia REST → labelled placeholder ---------- */
+function setPortrait(wrapSel,imgSel,local,titles){
+  probe(local).then(function(u){
+    if(u)return u;
+    var chain=Promise.resolve(null);
+    titles.forEach(function(t){chain=chain.then(function(f){if(f)return f;return wikiImage(t).then(function(u2){return u2?probe(u2):null;});});});
+    return chain;
+  }).then(function(u){
+    var w=$(wrapSel), im=$(imgSel);
+    if(u&&im){im.src=u;im.style.display='';}
+    else if(w){w.classList.add('no-photo');}
+  });
+}
+setPortrait('#pmPhoto','#pmPhoto img','pm-modi.jpg',['Narendra_Modi']);
+setPortrait('#minPhoto1','#minPhoto1 img','minister-culture.jpg',['Gajendra_Singh_Shekhawat']);
+setPortrait('#minPhoto2','#minPhoto2 img','minister-state-culture.jpg',['Rao_Inderjit_Singh']);
+
+/* ---------- intro atmosphere: cultural fragments ---------- */
+var FRAGS=[
+ {t:'ch',v:'♪'},{t:'ch',v:'♫'},{t:'ch',v:'स'},{t:'ch',v:'क'},{t:'ch',v:'लि'},{t:'ch',v:'ॠ'},
+ {t:'svg',v:'<svg viewBox="0 0 34 44" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 2 C28 12 32 22 32 30 C32 38 25 42 17 42 C9 42 2 38 2 30 C2 22 6 12 17 2 Z M17 12 C22 18 24 24 24 29 C24 34 21 36 17 36 C13 36 10 34 10 29 C10 24 12 18 17 12 Z"/></svg>'},
+ {t:'svg',v:'<svg viewBox="0 0 40 34" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 32 L2 14 C2 6 10 2 20 2 C30 2 38 6 38 14 L38 32 M8 32 L8 16 M14 32 L14 12 M20 32 L20 10 M26 32 L26 12 M32 32 L32 16"/></svg>'},
+ {t:'svg',v:'<svg viewBox="0 0 40 26" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 24 C14 14 8 10 2 10 C6 4 14 2 20 8 C26 2 34 4 38 10 C32 10 26 14 20 24 Z M20 8 L20 24"/></svg>'},
+ {t:'svg',v:'<svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="16" cy="16" r="13"/><path d="M16 3 L19 13 L29 16 L19 19 L16 29 L13 19 L3 16 L13 13 Z"/></svg>'}
+];
+function buildIntroFX(){
+  if(reduced)return;
+  var f='',fc=window.innerWidth<640?8:14;
+  for(var i=0;i<fc;i++){
+    var fr=FRAGS[i%FRAGS.length],left=Math.random()>.5,x=left?rnd(3,32):rnd(66,94);
+    f+='<div class="fl" style="--x:'+x.toFixed(1)+'%;--y:'+rnd(6,80).toFixed(1)+'%;--s:'+rnd(.6,1.15).toFixed(2)+';--fs:'+rnd(.8,1.5).toFixed(2)+';--dur:'+rnd(6,11).toFixed(1)+'s;--del:'+rnd(0,3).toFixed(1)+'s;--o:'+rnd(.25,.55).toFixed(2)+';--r0:'+rnd(-8,0).toFixed(1)+'deg;--r1:'+rnd(2,9).toFixed(1)+'deg;--bl:'+(Math.random()>.75?'1.5px':'0px')+'">'+(fr.t==='ch'?'<span class="ch">'+fr.v+'</span>':fr.v)+'</div>';
+  }
+  $('.intro-float').innerHTML=f;
+}
+
+/* ---------- three.js 3D gold mandala ---------- */
+var threeStop=false;
+function initThree(){
+  if(reduced||window.__noThree||!window.THREE)return;
+  var canvas=$('#introCanvas'),renderer;
+  try{renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true});}catch(e){return;}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
+  var scene=new THREE.Scene();
+  var cam=new THREE.PerspectiveCamera(55,1,0.1,120); cam.position.z=26;
+  var grp=new THREE.Group();
+  var gold=new THREE.PointsMaterial({color:0xC9A24B,size:0.09,transparent:true,opacity:0.85,depthWrite:false});
+  var maroon=new THREE.PointsMaterial({color:0x8C2F39,size:0.07,transparent:true,opacity:0.55,depthWrite:false});
+  function ring(count,radius,mat){
+    var g=new THREE.BufferGeometry(),pos=new Float32Array(count*3);
+    for(var i=0;i<count;i++){var a=i/count*Math.PI*2;pos[i*3]=Math.cos(a)*radius;pos[i*3+1]=(Math.random()-.5)*0.5;pos[i*3+2]=Math.sin(a)*radius;}
+    g.setAttribute('position',new THREE.BufferAttribute(pos,3));
+    grp.add(new THREE.Points(g,mat));
+  }
+  ring(160,6,gold); ring(240,9,maroon); ring(320,12.5,gold); ring(400,16,maroon); ring(480,19.5,gold);
+  var dg=new THREE.BufferGeometry(),dn=280,dp=new Float32Array(dn*3);
+  for(var i=0;i<dn;i++){dp[i*3]=(Math.random()-.5)*64;dp[i*3+1]=(Math.random()-.5)*36;dp[i*3+2]=(Math.random()-.5)*30-6;}
+  dg.setAttribute('position',new THREE.BufferAttribute(dp,3));
+  var dust=new THREE.Points(dg,new THREE.PointsMaterial({color:0xE4C580,size:0.06,transparent:true,opacity:0.5,depthWrite:false}));
+  scene.add(grp); scene.add(dust);
+  grp.rotation.x=0.95;
+  var mx=0,my=0,tx=0,ty=0;
+  addEventListener('pointermove',function(e){mx=e.clientX/innerWidth-.5;my=e.clientY/innerHeight-.5;});
+  function size(){var w=canvas.clientWidth||innerWidth,h=canvas.clientHeight||innerHeight;renderer.setSize(w,h,false);cam.aspect=w/h;cam.updateProjectionMatrix();}
+  size(); addEventListener('resize',size);
+  var t0=performance.now();
+  (function loop(){
+    if(threeStop)return;
+    requestAnimationFrame(loop);
+    var t=(performance.now()-t0)/1000;
+    grp.rotation.z=t*0.05; dust.rotation.y=t*0.012;
+    tx+=(mx*0.35-tx)*0.04; ty+=(my*0.22-ty)*0.04;
+    grp.rotation.y=tx; grp.rotation.x=0.95+ty;
+    renderer.render(scene,cam);
+  })();
+}
+
+/* ---------- intro lifecycle ---------- */
+var revealsInit=false;
+function initReveals(){
+  if(revealsInit)return; revealsInit=true;
+  var els=$$('.rv, .lm');
+  if(reduced||!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in');});return;}
+  var io=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){en.target.classList.add('in');io.unobserve(en.target);}});},{threshold:.15,rootMargin:'0px 0px -40px 0px'});
+  els.forEach(function(e){io.observe(e);});
+}
+function enterSite(){
+  if(entered)return; entered=true;
+  threeStop=true;
+  document.dispatchEvent(new Event('introOff'));
+  intro.classList.add('leaving');
+  document.documentElement.classList.remove('intro-lock');
+  setTimeout(function(){intro.hidden=true;initReveals();},reduced?30:820);
+}
+function playIntro(){
+  entered=false; threeStop=false;
+  buildIntroFX(); initThree();
+  intro.hidden=false;
+  intro.classList.remove('leaving','run');
+  void intro.offsetWidth;
+  intro.classList.add('run');
+  document.documentElement.classList.add('intro-lock');
+}
+$('#enterBtn').addEventListener('click',enterSite);
+$('#skipBtn').addEventListener('click',enterSite);
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!intro.hidden)enterSite();});
+$('#replayBtn').addEventListener('click',function(){window.scrollTo({top:0,behavior:'auto'});playIntro();toast('Replaying the museum opening');});
+if(reduced){entered=true;intro.hidden=true;document.documentElement.classList.remove('intro-lock');initReveals();}
+else{playIntro();}
+
+/* ---------- header / scroll / parallax ---------- */
+var header=$('#siteHeader'),bar=$('#progress'),pxEls=$$('[data-px]'),ticking=false;
+function onScroll(){
+  if(ticking)return; ticking=true;
+  requestAnimationFrame(function(){
+    ticking=false;
+    var y=window.scrollY;
+    header.classList.toggle('scrolled',y>8);
+    var max=document.documentElement.scrollHeight-window.innerHeight;
+    bar.style.transform='scaleX('+(max>0?y/max:0)+')';
+    if(!reduced&&window.innerWidth>920){pxEls.forEach(function(el){el.style.transform='translate3d(0,'+(y*parseFloat(el.dataset.px))+'px,0)';});}
+  });
+}
+addEventListener('scroll',onScroll,{passive:true}); onScroll();
+var navLinks=$$('nav.main-menu a[href^="#"]'),secMap={};
+navLinks.forEach(function(a){var s=document.getElementById(a.getAttribute('href').slice(1));if(s)secMap[s.id]=a;});
+if('IntersectionObserver' in window){
+  var ao=new IntersectionObserver(function(es){es.forEach(function(en){if(en.isIntersecting){navLinks.forEach(function(a){a.removeAttribute('aria-current');});var l=secMap[en.target.id];if(l)l.setAttribute('aria-current','true');}});},{rootMargin:'-40% 0px -55% 0px'});
+  Object.keys(secMap).forEach(function(id){ao.observe(document.getElementById(id));});
+}
+var menuBtn=$('#menuBtn');
+menuBtn.addEventListener('click',function(){var o=header.classList.toggle('open');menuBtn.setAttribute('aria-expanded',o);});
+$$('nav.main-menu a').forEach(function(a){a.addEventListener('click',function(){header.classList.remove('open');menuBtn.setAttribute('aria-expanded','false');});});
+
+/* ---------- ticker ---------- */
+var track=$('#tickerTrack'); track.innerHTML+=track.innerHTML;
+
+/* ---------- gallery filters (chips + discovery doors) ---------- */
+var chips=$$('.filters button'),tiles=$$('#gal figure');
+function applyFilter(f){
+  chips.forEach(function(x){x.setAttribute('aria-pressed',String(x.dataset.f===f));});
+  tiles.forEach(function(t){
+    var show=f==='all'||t.dataset.cat===f;
+    t.classList.toggle('gone',!show);
+    if(show){t.classList.remove('pop');void t.offsetWidth;t.classList.add('pop');}
+  });
+}
+chips.forEach(function(c){c.addEventListener('click',function(){applyFilter(c.dataset.f);});});
+$$('.disc').forEach(function(d){d.addEventListener('click',function(){
+  applyFilter(d.dataset.cat);
+  var g=$('#heritage'); if(g)g.scrollIntoView({behavior:reduced?'auto':'smooth'});
+  toast('Gallery filtered: '+d.dataset.cat);
+});});
+
+/* ---------- museums rail ---------- */
+var rail=$('#rail');
+function railStep(d){var c=rail.querySelector('.mus-card');rail.scrollBy({left:d*((c?c.getBoundingClientRect().width:320)+20),behavior:reduced?'auto':'smooth'});}
+$('#railPrev').addEventListener('click',function(){railStep(-1);});
+$('#railNext').addEventListener('click',function(){railStep(1);});
+
+/* ---------- demo downloads ---------- */
+$$('.dl').forEach(function(btn){btn.addEventListener('click',function(){
+  var name=btn.dataset.name;
+  var body='MINISTRY OF CULTURE — CONCEPT DEMONSTRATION FILE\n====================================================\n\nDocument: '+name+'\nGenerated: '+new Date().toLocaleString()+'\n\nThis is a SAMPLE file produced by an independent, unofficial website redesign concept created for a developer portfolio.\nIt is NOT an official Government of India document, and this site is not affiliated with or endorsed by the Government of India.\n';
+  var blob=new Blob([body],{type:'text/plain'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=name.replace(/[^\w\- ]/g,'').replace(/\s+/g,'-').toLowerCase()+'-demo.txt';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},4000);
+  toast('Sample file downloaded — demo content only');
+});});
+
+/* ---------- demo form ---------- */
+$('#conceptForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  var input=$('#conceptEmail');
+  if(!/.+@.+\..+/.test(input.value.trim())){toast('Please enter a valid email address (demo form)');input.focus();return;}
+  $('#formNote').innerHTML='<span class="foot-ok">✓ Thanks — this demo form stores nothing. (No data was sent.)</span>';
+  input.value='';
+  toast('Demo form submitted — nothing was stored or sent');
+});
+})();
+</script>
+  <!-- ============================================================
+     ADD-ON PATCH v3 — paste just before </body>. Nothing else changes.
+     1) Removes Skip/Enter buttons → intro auto-completes in 4 seconds
+     2) Guarantees the National Emblem + "MINISTRY OF CULTURE" title
+        animate visibly inside the intro (fixes title staying hidden)
+     3) Adds the OFFICIAL CONCEPT NOTE (unofficial-website disclaimer)
+        as a dedicated page section + stronger top-bar & pill wording
+     ============================================================ -->
+<style id="patch3-style">
+/* 1 · no skip / no enter button — the sequence runs itself */
+#skipBtn,.intro-cta{display:none !important}
+
+/* 2 · guarantee the intro title reveal while the intro is playing */
+@keyframes pcTitleUp{from{transform:translateY(112%)}to{transform:translateY(0)}}
+.intro.run .intro-title .lm>span{animation:pcTitleUp .95s 1.95s cubic-bezier(.22,.68,.24,1) forwards}
+
+/* 3 · official concept-note band (inserted above the footer) */
+.concept-note{padding:80px 0;background:var(--ivory-2);border-top:1px solid var(--line)}
+.cn-card{position:relative;background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--gold);
+  border-radius:var(--r);padding:38px 42px;box-shadow:var(--shadow-sm);max-width:900px;margin-inline:auto}
+.cn-tag{font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--maroon)}
+.cn-card h2{font-size:clamp(1.6rem,3vw,2.3rem);color:var(--maroon-deep);margin:10px 0 12px}
+.cn-card p{color:var(--muted);font-size:14.5px}
+.cn-card p b{color:var(--maroon-deep)}
+.cn-link{margin-top:14px;font-size:13.5px}
+.cn-link a{color:var(--maroon);text-decoration:underline;text-underline-offset:3px;font-weight:600}
+@media (max-width:640px){.cn-card{padding:26px 22px}}
+</style>
+
+<script id="patch3-script">
+(function(){
+'use strict';
+var intro=document.getElementById('intro');
+var timer=null;
+
+/* ---- 1 · auto-complete the intro at exactly 4 seconds ----
+   We reuse the site's own built-in transition by programmatically
+   pressing the (now hidden) Enter button — no source edits needed. */
+function arm(){
+  clearTimeout(timer);
+  timer=setTimeout(function(){
+    if(!intro||intro.hidden)return;
+    var btn=document.getElementById('enterBtn');
+    if(btn)btn.click();
+  },4000);
+}
+function sync(){
+  if(!intro)return;
+  if(intro.hidden||intro.classList.contains('leaving')){clearTimeout(timer);return;}
+  if(intro.classList.contains('run'))arm();
+}
+if(intro){
+  sync();
+  new MutationObserver(sync).observe(intro,{attributes:true,attributeFilter:['class','hidden']});
+}
+/* hidden accessibility path remains: Esc key (built-in) and reduced-motion bypass */
+
+/* ---- 3 · stronger unofficial-website wording in existing bar & pill ---- */
+var bar=document.getElementById('noticeBar');
+if(bar){
+  var bs=bar.querySelector('span');
+  if(bs)bs.innerHTML='<b>OFFICIAL CONCEPT NOTE:</b> This is an <b>UNOFFICIAL</b> website — it is NOT the Ministry of Culture or Government of India portal. It has been developed independently, purely as a design concept. Official information: <a href="https://www.culture.gov.in" target="_blank" rel="noopener">culture.gov.in ↗</a>';
+}
+var pill=document.getElementById('disclaimPill');
+if(pill){
+  var pl=pill.querySelector('.long');
+  if(pl)pl.textContent='Unofficial website — an independent design concept, not affiliated with or endorsed by the Government of India.';
+}
+
+/* ---- 3 · dedicated Concept Note section inserted above the footer ---- */
+var foot=document.getElementById('contact');
+if(foot&&!document.getElementById('conceptNote')){
+  var note=document.createElement('section');
+  note.id='conceptNote';
+  note.className='concept-note';
+  note.setAttribute('aria-label','Concept note and disclaimer');
+  note.innerHTML=
+    '<div class="wrap"><div class="cn-card">'+
+      '<span class="cn-tag">Concept Note · अस्वीकरण</span>'+
+      '<h2>This is an unofficial website.</h2>'+
+      '<p>It is not affiliated with, endorsed by, or maintained by the Ministry of Culture or the Government of India. '+
+      'It has been developed independently, <b>purely as a design concept</b> for portfolio and demonstration purposes. '+
+      'All events, publications, statistics and practitioner profiles are illustrative samples; leadership names, titles and '+
+      'quoted statements reproduce public information from culture.gov.in; imagery comes from openly-licensed public and press sources.</p>'+
+      '<p class="cn-link">For official information, always refer to <a href="https://www.culture.gov.in" target="_blank" rel="noopener">www.culture.gov.in ↗</a></p>'+
+    '</div></div>';
+  foot.parentNode.insertBefore(note,foot);
+}
+})();
+</script>
+  
+</body>
+</html>
